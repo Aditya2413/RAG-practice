@@ -1,0 +1,183 @@
+
+{
+  "info": {
+    "name": "RAG Chatbot API",
+    "description": "Collection for testing RAG Chatbot API endpoints",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Health & Stats",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://{{base_url}}/health",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Statistics",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://{{base_url}}/stats",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["stats"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Document Operations",
+      "item": [
+        {
+          "name": "Upload Single Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://{{base_url}}/upload",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["upload"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Multiple Documents",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://{{base_url}}/batch-upload",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["batch-upload"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Query Operations",
+      "item": [
+        {
+          "name": "Basic Query",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\": \"What is machine learning?\", \"k\": 5, \"rewrite_query\": true}"
+            },
+            "url": {
+              "raw": "http://{{base_url}}/query",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["query"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Query with Custom K",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"query\": \"Explain neural networks\", \"k\": 3, \"rewrite_query\": false}"
+            },
+            "url": {
+              "raw": "http://{{base_url}}/query",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["query"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Conversation History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://{{base_url}}/conversation-history",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["conversation-history"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Memory",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://{{base_url}}/clear-memory",
+              "protocol": "http",
+              "host": ["{{base_url}}"],
+              "path": ["clear-memory"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "localhost:8000",
+      "type": "default"
+    }
+  ]
+}
