@@ -1,0 +1,49 @@
+[project]
+name = "production-grade-ragbot"
+version = "0.1.0"
+description = "Multi-Tenant RAG Chatbot with FastAPI, Qdrant, and Celery"
+requires-python = ">=3.12"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+# Automatically run with verbose output and check test coverage in the "src" folder
+addopts = "-v --cov=src --cov-report=term-missing"
+# Automatically load the .env file during tests
+env_files = [".env"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["src/api/main.py", "src/core/config.py"] # Don't penalize coverage for setup files
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# Exclude folders that shouldn't be linted (like Alembic database migrations)
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "src/infrastructure/database/postgres/migrations"
+]
+
+[tool.ruff.lint]
+# Enable Pyflakes (F), pycodestyle (E), isort (I) for import sorting, and bugbear (B) for bug detection
+select = ["E", "F", "I", "B"]
+ignore = []
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+# Ignore Alembic migration files because auto-generated DB code often fails strict typing
+exclude = [
+    "src/infrastructure/database/postgres/migrations"
+]

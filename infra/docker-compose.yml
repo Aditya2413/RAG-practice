@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  # 1. PostgreSQL: Our main relational database (Stores users, tenants, chat history)
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ragbot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ragbot_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-ragbot}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ragbot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. Redis: Used for fast caching, rate-limiting, and short-term chat memory
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  
+# 2.5 RedisInsight: The Web UI for Redis
+  redisinsight:
+    image: redis/redisinsight:latest
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+
+  # 3. RabbitMQ: Message broker to handle background tasks (like processing heavy PDFs)
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "5672:5672"     # Application connection port
+      - "15672:15672"   # Web UI dashboard port
+
+  # 4. Qdrant: Our Vector Database (Stores document embeddings for semantic search)
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"     # REST API
+      - "6334:6334"     # gRPC API
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  # 5. Adminer: A lightweight web UI to look inside our Postgres Database easily
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  # Named volumes ensure our data isn't deleted when we stop the containers
+  pgdata:
+  qdrant_data:
