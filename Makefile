@@ -1,9 +1,12 @@
-.PHONY: dev down test lint format worker
+.PHONY: dev down serve test lint format worker migrate
 
-# Starts the databases in the background, then runs the FastAPI server
+# Starts the databases in the background
 dev:
 	docker-compose -f infra/docker-compose.yml up -d
-# 	uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Runs the FastAPI development server (requires infra running via `make dev`)
+serve:
+	uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000
 
 # Stops and removes the database containers
 down:
@@ -26,3 +29,7 @@ format:
 # (We will use this in Day 13) Starts the background worker for file processing
 worker:
 	celery -A src.infrastructure.message_queue.celery_app worker -Q ingestion.documents -l info
+
+# Runs Alembic database migrations (Day 2+)
+migrate:
+	alembic upgrade head

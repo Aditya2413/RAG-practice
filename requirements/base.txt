@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+asyncpg
+pydantic-settings
+redis[hiredis]
+celery
+aio-pika
+qdrant-client
+boto3
+structlog
+prometheus-fastapi-instrumentator
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart

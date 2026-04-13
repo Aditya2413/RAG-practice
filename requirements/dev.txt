@@ -1,0 +1,8 @@
+-r base.txt
+pytest
+pytest-asyncio
+httpx
+testcontainers
+factory-boy
+pytest-cov
+pytest-env
