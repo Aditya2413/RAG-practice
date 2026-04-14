@@ -36,7 +36,7 @@ _TTL_SECONDS = {
     "upload": 86_400,
 }
 
-_SKIP_PREFIXES = ("/v1/health", "/docs", "/openapi.json", "/redoc", "/metrics")
+_SKIP_PREFIXES = ("/v1/health", "/v1/auth/register", "/docs", "/openapi.json", "/redoc", "/metrics")
 
 
 def _get_route_type(path: str) -> str | None:

@@ -16,6 +16,7 @@ _PUBLIC_PREFIXES = (
     "/v1/health",
     "/v1/auth/login",
     "/v1/auth/refresh",
+    "/v1/auth/register",
     "/docs",
     "/openapi.json",
     "/redoc",

@@ -15,12 +15,14 @@ class Settings(BaseSettings):
     app_public_key: str = ""        # RS256 public key PEM  — required in production
     app_cors_origins: str = "http://localhost:3000"
 
-    # ── PostgreSQL ────────────────────────────────────────────────────────────
-    postgres_user: str = "ragbot"
-    postgres_password: str = "ragbot_@123"
-    postgres_db: str = "ragbot"
-    postgres_host: str = "localhost"
+    # ── PostgreSQL (SQLAlchemy / asyncpg) ─────────────────────────────────────
+    postgres_user: str = "postgres"
+    postgres_password: str = ""
+    postgres_db: str = "postgres"
+    postgres_host: str = "pg-database.cxekc0wmoulk.ap-south-1.rds.amazonaws.com"
     postgres_port: int = 5432
+    postgres_ssl: bool = True        # True → asyncpg uses verify-full SSL (RDS)
+    postgres_ssl_cert: str = "./global-bundle.pem"   # path to RDS CA bundle
     database_pool_size: int = 20
     database_max_overflow: int = 10
 
@@ -44,10 +46,19 @@ class Settings(BaseSettings):
     qdrant_port: int = 6333
     qdrant_api_key: str = ""        # Only needed for Qdrant Cloud
 
+    # ── AWS RDS (psycopg2 direct connection) ──────────────────────────────────
+    rds_host: str = "pg-database.cxekc0wmoulk.ap-south-1.rds.amazonaws.com"
+    rds_port: int = 5432
+    rds_db: str = "postgres"
+    rds_user: str = "postgres"
+    rds_db_password: str = ""          # plaintext — dev/test only
+    rds_secret_name: str = ""          # AWS Secrets Manager secret name (prod)
+    rds_ssl_cert: str = "./global-bundle.pem"
+
     # ── AWS S3 ────────────────────────────────────────────────────────────────
     aws_access_key_id: str = ""
     aws_secret_access_key: str = ""
-    aws_region: str = "us-east-1"
+    aws_region: str = "ap-south-1"
     s3_bucket_name: str = "ragbot-files"
     s3_presigned_url_ttl: int = 3600
 

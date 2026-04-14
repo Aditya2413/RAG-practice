@@ -4,7 +4,7 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.context import current_tenant_ctx
+from src.core.context import current_tenant_ctx, current_user_ctx
 from src.core.exceptions import AuthError, PermissionDeniedError
 from src.core.security import decode_access_token
 from src.infrastructure.database.postgres.connection import AsyncSessionLocal
@@ -34,6 +34,7 @@ async def get_current_user(
     user = await repo.find_by_id(user_id)
     if user is None or not user.is_active:
         raise AuthError("User not found or inactive")
+    current_user_ctx.set(user)  # bind for structured logging / service layer
     return user
 
 
