@@ -10,11 +10,13 @@ Track execution module-by-module from `IMPLEMENTATION.md`.
 - [ ] Module 5 complete (Days 25-27)
 - [ ] Module 6 complete (Days 28-32)
 
+> Days 1–4 implementation files are fully written. Day 5 (S3 + Qdrant + Celery) is next.
+
 ## Module 1 — Foundation & Infrastructure (Days 1-5)
 - [x] Day 1: Project skeleton, config, docker-compose, health endpoints
 - [x] Day 2: Postgres models + Alembic initial migration
-- [ ] Day 3: Auth (JWT + RBAC) + tenant context middleware
-- [ ] Day 4: Redis rate limiter + collections CRUD + v1 router
+- [x] Day 3: Auth (JWT + RBAC) + tenant context middleware
+- [x] Day 4: Redis rate limiter + collections CRUD + v1 router
 - [ ] Day 5: S3 storage layer + Qdrant client/store + Celery app bootstrap
 
 ## Module 2 — Ingestion Pipeline (Days 6-13)
@@ -78,3 +80,13 @@ Copy this section for each day while executing:
 - Issues found: Docker Desktop was not started at verification time
 - Fixes/decisions: Run `make dev` first, then `make migrate` to apply
 - Next day prep: Day 3 — Auth system (JWT + RBAC). Needs docker running + `make migrate` verified.
+
+### Day 3 Notes
+- Date: 2026-04-14
+- Completed: security.py (JWT RS256/HS256, bcrypt, refresh token rotation), auth router (register/login/refresh/logout/me), all 4 middlewares (RequestID, TenantContext, RateLimit, auth helper), dependencies.py (get_current_user + require_role RBAC, current_user_ctx now set), core/constants.py (role constants + pagination defaults), repositories (user, tenant, collection), tenant_service, collections router, all schemas. tests/conftest.py (async fixtures: db_session, async_client, tenant_factory, user_factory). tests/integration/test_auth_flow.py (13 tests covering register/login/me/refresh/logout happy + error paths).
+- Note: Day 4 (rate limiter + collections CRUD + v1 router) was already fully implemented alongside Day 3 scaffolding — marked complete.
+- Gap fixed: get_current_user now calls current_user_ctx.set(user) so service layer has access without param threading.
+- Tests run: `pytest tests/integration/test_auth_flow.py -v` (requires `make dev` + `make migrate` first)
+- Issues found: None
+- Fixes/decisions: Used SAVEPOINT-based rollback in conftest for test isolation; test DB = ragbot_test (auto-created)
+- Next day prep: Day 5 — S3 storage layer + Qdrant client/store + Celery app bootstrap
